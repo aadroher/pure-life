@@ -4,11 +4,10 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, logShow)
-import PureLife.Cell (Cell, State(Alive), newCell)
-import PureLife.World (addCell, newWorld)
+import PureLife.World (Cell, addCell, neighbours, newCell, newWorld)
 
 aCell :: Cell
-aCell = newCell 0 1 Alive
+aCell = newCell 0 1
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
@@ -17,3 +16,4 @@ main = do
   logShow aCell
   let w1 = addCell aCell w0
   log $ "Filled world: " <> (show w1)
+  logShow $ neighbours aCell
