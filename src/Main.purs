@@ -4,7 +4,22 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, logShow)
-import PureLife.World (Cell, addCell, neighbours, newCell, newWorld)
+import Data.Array (fromFoldable) as A
+import Data.Array (mapMaybe, (!!))
+import Data.Maybe (Maybe(..))
+import Data.Set (Set)
+import Data.Set (fromFoldable) as S
+import PureLife.World (Cell, World(World), affectedCells, fromPair, neighbours, newCell, newWorld)
+
+oscillatorCellPositions :: Array (Array Int)
+oscillatorCellPositions =
+  [ [0, 0]
+  , [0, 1]
+  , [0, 2]
+  ]
+
+cells :: Set Cell
+cells = S.fromFoldable $ mapMaybe fromPair oscillatorCellPositions
 
 aCell :: Cell
 aCell = newCell 0 0
@@ -14,6 +29,6 @@ main = do
   let w0 = newWorld []
   log $ "Empty world: " <> (show w0)
   logShow aCell
-  let w1 = addCell aCell w0
+  let w1 = World cells
   log $ "Filled world: " <> (show w1)
-  logShow $ neighbours aCell
+  logShow $ World $ affectedCells w1
