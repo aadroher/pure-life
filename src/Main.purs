@@ -7,7 +7,7 @@ import Control.Monad.Eff.Console (CONSOLE, log, logShow)
 import PureLife.World (Cell, addCell, neighbours, newCell, newWorld)
 
 aCell :: Cell
-aCell = newCell 0 1
+aCell = newCell 0 0
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do

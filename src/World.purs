@@ -2,6 +2,8 @@ module PureLife.World where
 
 import Prelude
 
+import Data.Array ((..))
+import Control.MonadZero (guard)
 import Data.Set (Set, fromFoldable, insert, member)
 import Data.Tuple (Tuple(..))
 
@@ -22,17 +24,13 @@ newCell x y = Cell (Tuple x y)
 
 neighbours :: Cell -> Set Cell
 neighbours (Cell (Tuple x y)) =
-  fromFoldable $
-    mapper <$> adjacentPositions
+  fromFoldable adjacentPositions
   where
-    adjacentPositions =
-      [ [-1, 1],  [0, 1],  [1, 1]
-      , [-1, 0],           [1, 0]
-      , [-1, -1], [0, -1], [1, -1]
-      ]
-    mapper :: Array Int -> Cell
-    mapper [i, j] = newCell (x + i) (y + j)
-    mapper _ = newCell 0 0
+    adjacentPositions = do
+      i <- -1 .. 1
+      j <- -1 .. 1
+      guard $ (i /= 0 || j /= 0)
+      pure $ newCell (x + i) (y + j)
 
 data World = World (Set Cell)
 
@@ -48,10 +46,10 @@ addCell cell (World aliveCells) = World $ insert cell aliveCells
 isAlive :: Cell -> World -> Boolean
 isAlive c (World cs) = member c cs
 
-affectedCells :: World -> Set Cell
-affectedCells (World cs) =
+-- affectedCells :: World -> Set Cell
+-- affectedCells (World cs) =
 
 
 
-evolve :: World -> World
-evolve w = w
+-- evolve :: World -> World
+-- evolve w = w
