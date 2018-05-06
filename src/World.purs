@@ -27,8 +27,9 @@ neighbours (Cell (Tuple x y)) =
   fromFoldable adjacentPositions
   where
     adjacentPositions = do
-      i <- -1 .. 1
-      j <- -1 .. 1
+      let unitRange = -1 .. 1
+      i <- unitRange
+      j <- unitRange
       guard $ (i /= 0 || j /= 0)
       pure $ newCell (x + i) (y + j)
 
