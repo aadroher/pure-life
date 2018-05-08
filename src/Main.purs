@@ -4,12 +4,10 @@ import Prelude
 
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, logShow)
-import Data.Array (fromFoldable) as A
-import Data.Array (mapMaybe, (!!))
-import Data.Maybe (Maybe(..))
+import Data.Array (mapMaybe)
 import Data.Set (Set)
 import Data.Set (fromFoldable) as S
-import PureLife.World (Cell, World(World), affectedCells, fromPair, neighbours, newCell, newWorld)
+import PureLife.World (Cell, World(World), affectedCells, fromPair, newCell, newWorld)
 
 oscillatorCellPositions :: Array (Array Int)
 oscillatorCellPositions =
