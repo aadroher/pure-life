@@ -3,10 +3,10 @@ module PureLife.World where
 import Prelude
 
 import Control.MonadZero (guard)
-import Data.Array (concatMap, filterA, head, singleton, tail, (..), (:))
+import Data.Array ((..))
 import Data.Array (fromFoldable) as A
 import Data.Maybe (Maybe(..))
-import Data.Set (Set, empty, insert, member, union)
+import Data.Set (Set, insert, member)
 import Data.Set (fromFoldable) as S
 import Data.Tuple (Tuple(..))
 
