@@ -3,7 +3,7 @@ module PureLife.World where
 import Prelude
 
 import Control.MonadZero (guard)
-import Data.Array (concatMap, head, singleton, tail, (..), (:))
+import Data.Array (concatMap, filterA, head, singleton, tail, (..), (:))
 import Data.Array (fromFoldable) as A
 import Data.Maybe (Maybe(..))
 import Data.Set (Set, empty, insert, member, union)
@@ -26,42 +26,35 @@ instance showState :: Show State where
   show Dead = "💀"
   show Alive = "❤️"
 
-data Cell = Cell (Tuple Int Int) State
+data Cell = Cell (Tuple Int Int)
 
 instance eqCell :: Eq Cell where
-  eq (Cell t0 s0) (Cell t1 s1) = t0 == t1 && s0 == s1
+  eq (Cell t0) (Cell t1) = t0 == t1
 
 instance ordCell :: Ord Cell where
-  compare (Cell t0 s0) (Cell t1 s1) =
-    case firstComparison of
-      EQ -> firstComparison
-      _ -> compare s0 s1
-    where firstComparison = compare t0 t1
+  compare (Cell t0) (Cell t1) = compare t0 t1
 
 instance showCell :: Show Cell where
-  show (Cell (Tuple x y) s) =
-    "[(" <> show x <> ", " <> show y <> "):" <> show s <> "]"
+  show (Cell (Tuple x y)) =
+    "(" <> show x <> ", " <> show y <> ")"
 
-newCell :: Int -> Int -> State -> Cell
-newCell x y s = Cell (Tuple x y) s
+newCell :: Int -> Int -> Cell
+newCell x y = Cell (Tuple x y)
 
 fromPair :: Array Int -> Maybe Cell
-fromPair [x, y] = Just $ newCell x y Alive
+fromPair [x, y] = Just $ newCell x y
 fromPair _ = Nothing
 
-neighbours :: Cell -> World -> Set Cell
-neighbours c w =
+neighbours :: Cell -> Set Cell
+neighbours (Cell (Tuple x y)) =
   S.fromFoldable adjacentPositions
   where
     adjacentPositions = do
-      let (Cell (Tuple x y) _) = c
       let unitRange = -1 .. 1
       i <- unitRange
       j <- unitRange
       guard $ (i /= 0 || j /= 0)
-      let cellX = (x + i)
-          cellY = (y + j)
-      pure $ newCell (x + i) (y + j) $ cellState c w
+      pure $ newCell (x + i) (y + j)
 
 data World = World (Set Cell)
 
@@ -89,6 +82,8 @@ affectedCells (World cellSet) =
   where
     cells = A.fromFoldable cellSet
     newCells = cells >>= (A.fromFoldable <<< neighbours)
+
+
 
 
 
