@@ -2,8 +2,11 @@ module Test.Main where
 
 import Prelude
 import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Node.FS (FS)
+import Test.Spec.Discovery (discover)
+import Test.Spec.QuickCheck (QCRunnerEffects)
+import Test.Spec.Reporter.Console (consoleReporter)
+import Test.Spec.Runner (run)
 
-main :: forall e. Eff (console :: CONSOLE | e) Unit
-main = do
-  log "You should add some tests."
+main :: Eff (QCRunnerEffects (fs :: FS)) Unit
+main = discover "PureLife\\..+Spec" >>= run [consoleReporter]
