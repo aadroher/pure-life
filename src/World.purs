@@ -1,4 +1,8 @@
-module PureLife.World where
+module PureLife.World
+    ( Cell
+    , World(..)
+    , newWorld
+    ) where
 
 import Prelude
 
@@ -56,7 +60,7 @@ neighbours (Cell (Tuple x y)) =
       guard $ (i /= 0 || j /= 0)
       pure $ newCell (x + i) (y + j)
 
-data World = World (Set Cell)
+newtype World = World (Set Cell)
 
 instance showWorld :: Show World where
   show (World aliveCells) = "(w: " <> (show aliveCells) <> ")"
